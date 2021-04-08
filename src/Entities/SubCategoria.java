@@ -4,10 +4,16 @@ public class SubCategoria {
     private int id;
     private String nombre;
     private int idCategoriaPadre;
+    public SubCategoria (){ }
 
     public SubCategoria(int id,String nombre) {
         this.id =id;
         this.nombre = nombre;
+    }
+
+    public SubCategoria(String nombre, int idCategoriaPadre) {
+        this.nombre = nombre;
+        this.idCategoriaPadre = idCategoriaPadre;
     }
 
     public int getId() {

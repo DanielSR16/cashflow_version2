@@ -2,8 +2,10 @@ package Controller;
 
 import DAO.CategoriaDAO;
 import DAO.ClasificacionDAO;
+import DAO.SubCategoriaDAO;
 import Entities.Categoria;
 import Entities.Clasificacion;
+import Entities.SubCategoria;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,7 +23,8 @@ import java.util.ResourceBundle;
 public class categoriaController implements Initializable {
     ClasificacionDAO clasificacionDAO  = new ClasificacionDAO();
     CategoriaDAO categoriaDAO = new CategoriaDAO();
-    Categoria categoria = new Categoria();
+    SubCategoriaDAO subCategoriaDAO = new SubCategoriaDAO();
+    private boolean band = false;
 
 
     @FXML
@@ -48,16 +51,56 @@ public class categoriaController implements Initializable {
     @FXML
     void guardarClicked(MouseEvent event) {
 
+        if(band == false){
 
+            Categoria categoria = new Categoria(textFliedCategoria.getText(),comboBoxClasificacion.getSelectionModel().getSelectedIndex()+1);
+            categoriaDAO.insert(categoria);
+            SubCategoria subCategoria = new SubCategoria(textFieldSubCategoria.getText(),categoriaDAO.getIdCategoria(textFliedCategoria.getText()));
+            subCategoriaDAO.insert(subCategoria);
+
+        } else {
+
+
+            if(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().isEmpty()){
+
+                SubCategoria subCategoria = new SubCategoria(textFieldSubCategoria.getText(),tabla.getSelectionModel().getSelectedItem().getId());
+                subCategoriaDAO.insert(subCategoria);
+
+
+
+            }else{
+
+                //PRIMERO COMPARAMOS LAS NOMBRE DE LA CATEGORIAS TABLA -> TEXTFLIELD
+
+                if(tabla.getSelectionModel().getSelectedItem().getNombre().compareTo(textFliedCategoria.getText()) != 0){
+
+                    tabla.getSelectionModel().getSelectedItem().setNombre(textFliedCategoria.getText());
+
+                    categoriaDAO.updateCategorias(tabla.getSelectionModel().getSelectedItem());
+
+                }
+                //SEGUNDO COMPARAMOS EL NOMBRE DE LAS SUBCATEGORIA TABLA(ComboBox) -> TEXTFLIED
+                if(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem().toString().compareTo(textFieldSubCategoria.getText()) != 0){
+
+                    subCategoriaDAO.updateSubCategorias(subCategoriaDAO.getSubcategoriaPorNombre(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem().toString()),textFieldSubCategoria.getText());
+
+                }
+            }
+
+
+
+
+            band=false;
+        }
 
 
 
         tabla.getItems().clear();
 
         ObservableList<Categoria> cat =  FXCollections.observableArrayList();
-        calsificacionColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombre"));
-        categoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombreClasificacion"));
-        subcategoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("idSubCategoria"));
+        calsificacionColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombreClasificacion"));
+        categoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombre"));
+        subcategoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("subcategorias"));
         cat.addAll(categoriaDAO.getAllCategoria());
         tabla.setItems(cat);
 
@@ -74,18 +117,23 @@ public class categoriaController implements Initializable {
     @FXML
     void seleccionarClicked(MouseEvent event) {
 
-        System.out.println(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem());
-//        if(tabla.getSelectionModel().isEmpty()){
-//            System.out.println("no seleccioneeeee");
-//            tabla.getSelectionModel().clearSelection();
-//        }else{
-//            comboBoxClasificacion.setValue(tabla.getSelectionModel().getSelectedItem().getNombre());
-//
-//        }
 
+        //System.out.println(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem());
 
+        band=true;
+        if(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().isEmpty()){
+            textFieldSubCategoria.clear();
+            comboBoxClasificacion.setValue(tabla.getSelectionModel().getSelectedItem().getNombreClasificacion());
+            textFliedCategoria.setText(tabla.getSelectionModel().getSelectedItem().getNombre());
 
-//        System.out.println( tabla.getSelectionModel().getSelectedItem().getId());
+        }else {
+
+            comboBoxClasificacion.setValue(tabla.getSelectionModel().getSelectedItem().getNombreClasificacion());
+            textFliedCategoria.setText(tabla.getSelectionModel().getSelectedItem().getNombre());
+            textFieldSubCategoria.setText(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem().toString());
+        }
+
+        tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().clearSelection();
 
     }
 
@@ -100,8 +148,8 @@ public class categoriaController implements Initializable {
 
         ObservableList<Categoria> cat =  FXCollections.observableArrayList();
 
-        calsificacionColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombre"));
-        categoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombreClasificacion"));
+        calsificacionColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombreClasificacion"));
+        categoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("nombre"));
         subcategoriaColum.setCellValueFactory(new PropertyValueFactory<Categoria,String>("subcategorias"));
         cat.addAll(categoriaDAO.getAllCategoria());
         tabla.setItems(cat);

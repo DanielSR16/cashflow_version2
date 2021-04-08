@@ -22,7 +22,10 @@ public class Categoria {
         this.subcategorias = new ComboBox();
     }
 
-
+    public Categoria(String nombre, int idClasificacion) {
+        this.nombre = nombre;
+        this.idClasificacion = idClasificacion;
+    }
 
     public int getId() {return id;}
     

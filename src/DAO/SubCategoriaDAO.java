@@ -44,7 +44,7 @@ public class SubCategoriaDAO {
 
         if (connection != null) {
             String sql = " SELECT subcategoria.id id, subcategoria.nombre from categoria JOIN subcategoria\n" +
-                    "ON categoria.id = subcategoria.idClasificacionPadre where categoria.id = ?";
+                    "ON categoria.id = subcategoria.idcategoriapadre where categoria.id = ?";
 
             try {
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -68,6 +68,55 @@ public class SubCategoriaDAO {
         }
 
         return subCategorias;
+    }
+
+
+    public SubCategoria getSubcategoriaPorNombre(String nombre) {
+        SubCategoria subCategoria = new SubCategoria();
+        if (connection != null) {
+            String sql = "select id,idcategoriapadre from subcategoria where nombre=?";
+            try {
+                PreparedStatement statement = connection.prepareStatement(sql);
+
+                statement.setString(1, nombre);
+                ResultSet results = statement.executeQuery();
+                results.next();
+                if (results.getRow() == ACCEPT) {
+
+                    subCategoria.setId(results.getInt(1));
+                    subCategoria.setIdCategoriaPadre(results.getInt(2));
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return subCategoria;
+    }
+
+    public boolean updateSubCategorias(SubCategoria subcategoria,String nombre) {
+        boolean resultado = false;
+
+        if (connection != null) {
+            String sql = "update subcategoria set "
+                    + "nombre=?"
+                    + "where id=?";
+
+            try {
+                PreparedStatement statement = connection.prepareStatement(sql);
+
+                statement.setString(1, nombre);
+                statement.setInt(2, subcategoria.getId());
+                if (statement.executeUpdate() == ACCEPT)
+                    resultado = true;
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return resultado;
+
     }
 
 

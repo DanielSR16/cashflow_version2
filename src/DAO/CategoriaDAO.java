@@ -12,17 +12,16 @@ public class CategoriaDAO {
 	private final int ACCEPT = 1;
 	Connector dataAdapter= new Connector();
 	private Connection connection = dataAdapter.getConnectionMySql();
-	
+
 	public boolean insert(Categoria categoria) {
 		boolean resultado = false;
 		if (connection != null) {
-			String sql = "insert into categoria (nombre,idclasificacion,idsubcategoria) values(?,?,?)";
-			
+			String sql = "insert into categoria (nombre,idclasificacion) values(?,?)";
+
 			try {
 				PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, categoria.getNombre());
-			statement.setInt(2, categoria.getIdClasificacion());
-
+				statement.setString(1, categoria.getNombre());
+				statement.setInt(2, categoria.getIdClasificacion());
 				if (statement.executeUpdate() == ACCEPT)
 					resultado = true;
 			} catch (SQLException e) {
@@ -33,7 +32,7 @@ public class CategoriaDAO {
 		return resultado;
 	}
 
-	public String getIdSubCategoria(String nombre) {
+	public int getIdCategoria(String nombre) {
 		Categoria categoria = null;
 		if (connection != null) {
 			String sql = "select id from categoria where nombre=?";
@@ -52,8 +51,8 @@ public class CategoriaDAO {
 				e.printStackTrace();
 			}
 		}
-		String StringID = String.valueOf(categoria.getId());
-
+		int StringID = categoria.getId();
+		System.out.println("VALOR DEL ID "+StringID);
 		return StringID;
 	}
 
@@ -95,42 +94,20 @@ public class CategoriaDAO {
 			return categorias;
 		}
 
-
-	public String nombresSubCategoria(String sentenciasql){
-		List<String> subCategoriaNombre = new ArrayList<>();
-		System.out.println(sentenciasql);
-		try {
-			PreparedStatement statement2 = connection.prepareStatement(sentenciasql);
-			ResultSet results2 = statement2.executeQuery();
-			while (results2.next()) {
-				String idsubcategoria2 = results2.getString(1);
-				subCategoriaNombre.add(idsubcategoria2);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String nombresJuntos="";
-
-		for (int i = 0; i < subCategoriaNombre.size(); i++) {
-			nombresJuntos =  nombresJuntos + subCategoriaNombre.get(i) + ",";
-		}
-
-		return nombresJuntos;
-	}
-
-	public boolean updateSubcategorias(Categoria categoria,String nuevaSubcategoria) {
+	public boolean updateCategorias(Categoria categoria) {
 		boolean resultado = false;
 
 		if (connection != null) {
 			String sql = "update categoria set "
-					+ "idsubcategoria=?"
+					+ "nombre=?"
 					+ "where id=?";
 
 			try {
 				PreparedStatement statement = connection.prepareStatement(sql);
-				statement.setString(1, nuevaSubcategoria);
+
+
 				statement.setInt(2, categoria.getId());
+				statement.setString(1, categoria.getNombre());
 				if (statement.executeUpdate() == ACCEPT)
 					resultado = true;
 			} catch (SQLException e) {
@@ -141,6 +118,8 @@ public class CategoriaDAO {
 		return resultado;
 
 	}
+
+
 
 
 
