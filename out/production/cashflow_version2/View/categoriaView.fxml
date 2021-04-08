@@ -47,5 +47,10 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
+      <Label fx:id="labelError" layoutX="558.0" layoutY="341.0" prefHeight="48.0" prefWidth="114.0" textAlignment="CENTER" textFill="RED" wrapText="true">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
