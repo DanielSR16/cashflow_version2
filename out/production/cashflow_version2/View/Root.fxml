@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polyline?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="684.0" style="-fx-background-color: #94C8E0;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RootController">
+   <children>
+      <Polyline fill="#8abcd3" layoutX="50.0" layoutY="47.0" points="-50.00001525878906, -46.99999237060547, 634.0, 438.9999694824219, -49.99999237060547, 438.9999694824219, -50.00000762939453, -46.99999237060547" strokeType="INSIDE" strokeWidth="0.0" />
+      <Button layoutX="21.0" layoutY="215.0" mnemonicParsing="false" onMouseClicked="#categoriasClicked" prefHeight="56.0" prefWidth="176.0" style="-fx-background-color: #83B2C7;" text="Categorias" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
+      <Button layoutX="258.0" layoutY="215.0" mnemonicParsing="false" onMouseClicked="#flujoClicked" prefHeight="56.0" prefWidth="166.0" style="-fx-background-color: #83B2C7;" text="Flujo de efectivo" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
+      <Button layoutX="469.0" layoutY="215.0" mnemonicParsing="false" onMouseClicked="#indicadoresClicked" prefHeight="56.0" prefWidth="185.0" style="-fx-background-color: #83B2C7;" text="Indicadores de dinero" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Button>
+      <Circle fill="#6a8fa1" layoutX="623.0" layoutY="61.0" radius="47.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Label layoutX="294.0" layoutY="36.0" text="MENÚ" textFill="WHITE" underline="true">
+         <font>
+            <Font size="33.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="56.0" fitWidth="69.0" layoutX="595.0" layoutY="33.0" onMouseClicked="#reporteClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Resources/reporte-de-negocios.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
