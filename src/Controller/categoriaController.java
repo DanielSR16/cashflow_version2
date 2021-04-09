@@ -50,32 +50,44 @@ public class categoriaController implements Initializable {
     private Label labelError;
 
     @FXML
+    void eliminarOnMouseClicked(MouseEvent event) {
+        tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().clearSelection();
+        tabla.getSelectionModel().clearSelection();
+    }
+
+    @FXML
     void guardarClicked(MouseEvent event) {
 
 
-        if(tabla.getSelectionModel().isEmpty()){
+        if(tabla.getSelectionModel().isEmpty() ){
 
             labelError.setText("Selecciona la fila de la tabla");
 
 
-        }else{
+        } if(textFliedCategoria.getLength() == 0){
+            labelError.setText("Rellena la categoria");
+        }
+        else{
             labelError.setText("");
             if(band == false){
 
-                Categoria categoria = new Categoria(textFliedCategoria.getText(),comboBoxClasificacion.getSelectionModel().getSelectedIndex()+1);
-                categoriaDAO.insert(categoria);
-                SubCategoria subCategoria = new SubCategoria(textFieldSubCategoria.getText(),categoriaDAO.getIdCategoria(textFliedCategoria.getText()));
-                subCategoriaDAO.insert(subCategoria);
+                if(textFieldSubCategoria.getLength() != 0){
+                    Categoria categoria = new Categoria(textFliedCategoria.getText(),comboBoxClasificacion.getSelectionModel().getSelectedIndex()+1);
+                    categoriaDAO.insert(categoria);
+                    SubCategoria subCategoria = new SubCategoria(textFieldSubCategoria.getText(),categoriaDAO.getIdCategoria(textFliedCategoria.getText()));
+                    subCategoriaDAO.insert(subCategoria);
+                }else{
+                    Categoria categoria = new Categoria(textFliedCategoria.getText(),comboBoxClasificacion.getSelectionModel().getSelectedIndex()+1);
+                    categoriaDAO.insert(categoria);
+                }
+
 
             } else {
 
-
                 if(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().isEmpty() && textFieldSubCategoria.getLength() > 0){
-                    System.out.println("ENTRE A SUBCATEGORIA");
+                    System.out.println("ENTRO A AGREGAR UNA SUBCATEGORIA A UNA CATEGORIA");
                     SubCategoria subCategoria = new SubCategoria(textFieldSubCategoria.getText(),tabla.getSelectionModel().getSelectedItem().getId());
                     subCategoriaDAO.insert(subCategoria);
-
-
 
                 }
                 if(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().isEmpty() == false){
@@ -110,8 +122,9 @@ public class categoriaController implements Initializable {
             cat.addAll(categoriaDAO.getAllCategoria());
             tabla.setItems(cat);
 
+            System.out.println("HOLA PTO");
+            comboBoxClasificacion.setAccessibleText("PTO");
             textFliedCategoria.clear();
-            comboBoxClasificacion.getSelectionModel().clearSelection();
             textFieldSubCategoria.clear();
         }
 
@@ -147,8 +160,6 @@ public class categoriaController implements Initializable {
                 textFliedCategoria.setText(tabla.getSelectionModel().getSelectedItem().getNombre());
                 textFieldSubCategoria.setText(tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().getSelectedItem().toString());
             }
-
-            tabla.getSelectionModel().getSelectedItem().getSubcategorias().getSelectionModel().clearSelection();
 
         }
 
